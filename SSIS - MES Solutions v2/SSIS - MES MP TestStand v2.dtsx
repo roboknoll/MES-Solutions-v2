@@ -1,0 +1,1455 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="8/31/2015 6:56:09 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="PXLT44241"
+  DTS:CreatorName="DANFOSS\rknoll"
+  DTS:DTSID="{A58B05E5-8931-4C7A-B405-4A6981EF9A3A}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1301.433"
+  DTS:LocaleID="1051"
+  DTS:ObjectName="SSIS - MES MP TestStand v2"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="55"
+  DTS:VersionGUID="{6D9E72D3-AD86-49AB-9185-E36796B98DEB}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{2942BDDC-BBA0-45D7-999B-BF66D0BBA8DD}"
+      DTS:ObjectName="Recipients">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">rknoll@danfoss.com</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Send Alert"
+      DTS:CreationName="Microsoft.SendMailTask"
+      DTS:Description="Send Mail Task"
+      DTS:DTSID="{3E5860D0-30E8-4F88-A132-4EE115BF6F45}"
+      DTS:ExecutableType="Microsoft.SendMailTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Send Alert"
+      DTS:TaskContact="Send Mail Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:PropertyExpression
+        DTS:Name="ToLine">@[$Package::Recipients]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <SendMailTask:SendMailTaskData
+          SendMailTask:SMTPServer="{B17D5B37-BA83-4557-AB28-3CA71D14B3E7}"
+          SendMailTask:From="ssis@danfoss.com"
+          SendMailTask:To="rknoll@danfoss.com"
+          SendMailTask:CC="rknoll@danfoss.com"
+          SendMailTask:Subject="TestStand"
+          SendMailTask:Priority="High"
+          SendMailTask:MessageSource="Failed data preparation for TestStand." xmlns:SendMailTask="www.microsoft.com/sqlserver/dts/tasks/sendmailtask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\TestStand"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{8285FD1F-DE84-45D7-9BA7-CD5BD989AC6B}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="TestStand">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\TestStand\Mark TestStand Data Read"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{2EEC805E-A057-45AC-BFBE-A7FE92223042}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Mark TestStand Data Read"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{5B404F3F-437B-46F8-9241-3BECDE8B7541}"
+              SQLTask:SqlStatementSource="EXECUTE [dbo].[spSKMES_MP_TestStandSetWorkorderRead]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\TestStand\Receive Existing Requests for Test Stand"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{AA4ADA0D-4F95-4758-BBBA-0A5916E191C9}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Receive Existing Requests for Test Stand"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="PoziadVyrSAP"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[PoziadVyrSAP]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1250</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">0</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Connections[OleDbConnection]"
+                      connectionManagerID="{8B7F4271-B3BE-4898-9F6D-782512728060}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[VyrSkus]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].Columns[VyrCislo]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[VyrCislo]"
+                          length="20"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].Columns[VyrCislo]"
+                          name="VyrCislo"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].Columns[PracPrikaz]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[PracPrikaz]"
+                          length="50"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].Columns[PracPrikaz]"
+                          name="PracPrikaz"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[VyrCislo]"
+                          dataType="wstr"
+                          length="20"
+                          name="VyrCislo" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[ID]"
+                          dataType="wstr"
+                          length="15"
+                          name="ID" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[MMC]"
+                          dataType="wstr"
+                          length="70"
+                          name="MMC" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[CisZakazky]"
+                          dataType="wstr"
+                          length="15"
+                          name="CisZakazky" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[Zakaznik]"
+                          dataType="wstr"
+                          length="30"
+                          name="Zakaznik" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[DatZarad]"
+                          dataType="dbTimeStamp"
+                          name="DatZarad" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[CustomerNo]"
+                          dataType="wstr"
+                          length="50"
+                          name="CustomerNo" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].ExternalColumns[PracPrikaz]"
+                          dataType="wstr"
+                          length="50"
+                          name="PracPrikaz" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                        <outputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output].Columns[VyrCislo]"
+                          dataType="wstr"
+                          length="20"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output].Columns[VyrCislo]"
+                          name="VyrCislo" />
+                        <outputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output].Columns[PracPrikaz]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Error Output].Columns[PracPrikaz]"
+                          name="PracPrikaz" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="tblSKMES_MP_TestStandData"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[tblSKMES_MP_TestStandData]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1250</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Connections[OleDbConnection]"
+                      connectionManagerID="{5B404F3F-437B-46F8-9241-3BECDE8B7541}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[SKMESLOCAL]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input].Columns[VyrCislo]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="VyrCislo"
+                          externalMetadataColumnId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input].ExternalColumns[SERNR]"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].Columns[VyrCislo]" />
+                        <inputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input].Columns[PracPrikaz]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="PracPrikaz"
+                          externalMetadataColumnId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input].ExternalColumns[AUFNR]"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output].Columns[PracPrikaz]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input].ExternalColumns[SERNR]"
+                          dataType="wstr"
+                          length="50"
+                          name="SERNR" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input].ExternalColumns[AUFNR]"
+                          dataType="wstr"
+                          length="50"
+                          name="AUFNR" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\TestStand\Receive Existing Requests for Test Stand.Paths[OLE DB Source Output]"
+                  endId="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData.Inputs[OLE DB Destination Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\TestStand\Send SAP Requests to Test Stand"
+          DTS:CreationName="Microsoft.Pipeline"
+          DTS:Description="Data Flow Task"
+          DTS:DTSID="{D202EDE9-2C25-48EC-B98E-339137FF70CE}"
+          DTS:ExecutableType="Microsoft.Pipeline"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Send SAP Requests to Test Stand"
+          DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <pipeline
+              version="1">
+              <components>
+                <component
+                  refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP"
+                  componentClassID="Microsoft.OLEDBDestination"
+                  contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+                  description="OLE DB Destination"
+                  name="PoziadVyrSAP"
+                  usesDispositions="true"
+                  version="4">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset">[dbo].[PoziadVyrSAP]</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1250</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">3</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepIdentity">false</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                      name="FastLoadKeepNulls">false</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                      name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                      name="FastLoadMaxInsertCommitSize">2147483647</property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Connections[OleDbConnection]"
+                      connectionManagerID="{8B7F4271-B3BE-4898-9F6D-782512728060}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[VyrSkus]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <inputs>
+                    <input
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input]"
+                      errorOrTruncationOperation="Insert"
+                      errorRowDisposition="FailComponent"
+                      hasSideEffects="true"
+                      name="OLE DB Destination Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].Columns[Derived SERNR]"
+                          cachedDataType="wstr"
+                          cachedLength="20"
+                          cachedName="Derived SERNR"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[VyrCislo]"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived SERNR]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].Columns[Derived MATNR]"
+                          cachedDataType="wstr"
+                          cachedLength="15"
+                          cachedName="Derived MATNR"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[ID]"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived MATNR]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].Columns[Derived ZSDMODCODE]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="Derived ZSDMODCODE"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[MMC]"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived ZSDMODCODE]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].Columns[Derived KDAUF]"
+                          cachedDataType="wstr"
+                          cachedLength="15"
+                          cachedName="Derived KDAUF"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[CisZakazky]"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived KDAUF]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].Columns[Derived NAME1]"
+                          cachedDataType="wstr"
+                          cachedLength="30"
+                          cachedName="Derived NAME1"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[Zakaznik]"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived NAME1]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].Columns[Released Date]"
+                          cachedDataType="dbTimeStamp"
+                          cachedName="Released Date"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[DatZarad]"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Released Date]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].Columns[Derived MATNR_KU]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="Derived MATNR_KU"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[CustomerNo]"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived MATNR_KU]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].Columns[AUFNR]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="AUFNR"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[PracPrikaz]"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[AUFNR]" />
+                      </inputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[VyrCislo]"
+                          dataType="wstr"
+                          length="20"
+                          name="VyrCislo" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[ID]"
+                          dataType="wstr"
+                          length="15"
+                          name="ID" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[MMC]"
+                          dataType="wstr"
+                          length="70"
+                          name="MMC" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[CisZakazky]"
+                          dataType="wstr"
+                          length="15"
+                          name="CisZakazky" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[Zakaznik]"
+                          dataType="wstr"
+                          length="30"
+                          name="Zakaznik" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[DatZarad]"
+                          dataType="dbTimeStamp"
+                          name="DatZarad" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[CustomerNo]"
+                          dataType="wstr"
+                          length="50"
+                          name="CustomerNo" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input].ExternalColumns[PracPrikaz]"
+                          dataType="wstr"
+                          length="50"
+                          name="PracPrikaz" />
+                      </externalMetadataColumns>
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Outputs[OLE DB Destination Error Output]"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="OLE DB Destination Error Output"
+                      synchronousInputId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData"
+                  componentClassID="Microsoft.OLEDBSource"
+                  contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+                  description="OLE DB Source"
+                  name="spSKMES_MP_TestStandGetData"
+                  usesDispositions="true"
+                  version="7">
+                  <properties>
+                    <property
+                      dataType="System.Int32"
+                      description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                      name="CommandTimeout">0</property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the name of the database object used to open a rowset."
+                      name="OpenRowset"></property>
+                    <property
+                      dataType="System.String"
+                      description="Specifies the variable that contains the name of the database object used to open a rowset."
+                      name="OpenRowsetVariable"></property>
+                    <property
+                      dataType="System.String"
+                      description="The SQL command to be executed."
+                      name="SqlCommand"
+                      UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">EXECUTE [dbo].[spSKMES_MP_TestStandGetData]</property>
+                    <property
+                      dataType="System.String"
+                      description="The variable that contains the SQL command to be executed."
+                      name="SqlCommandVariable"></property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the column code page to use when code page information is unavailable from the data source."
+                      name="DefaultCodePage">1250</property>
+                    <property
+                      dataType="System.Boolean"
+                      description="Forces the use of the DefaultCodePage property value when describing character data."
+                      name="AlwaysUseDefaultCodePage">false</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the mode used to access the database."
+                      name="AccessMode"
+                      typeConverter="AccessMode">2</property>
+                    <property
+                      dataType="System.String"
+                      description="The mappings between the parameters in the SQL command and variables."
+                      name="ParameterMapping"></property>
+                  </properties>
+                  <connections>
+                    <connection
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Connections[OleDbConnection]"
+                      connectionManagerID="{5B404F3F-437B-46F8-9241-3BECDE8B7541}:external"
+                      connectionManagerRefId="Project.ConnectionManagers[SKMESLOCAL]"
+                      description="The OLE DB runtime connection used to access the database."
+                      name="OleDbConnection" />
+                  </connections>
+                  <outputs>
+                    <output
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output]"
+                      name="OLE DB Source Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[SERNR]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[SERNR]"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[SERNR]"
+                          name="SERNR"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[MATNR]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[MATNR]"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[MATNR]"
+                          name="MATNR"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[ZSDMODCODE]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[ZSDMODCODE]"
+                          length="150"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[ZSDMODCODE]"
+                          name="ZSDMODCODE"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[KDAUF]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[KDAUF]"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[KDAUF]"
+                          name="KDAUF"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[NAME1]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[NAME1]"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[NAME1]"
+                          name="NAME1"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[MATNR_KU]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[MATNR_KU]"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[MATNR_KU]"
+                          name="MATNR_KU"
+                          truncationRowDisposition="FailComponent" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[AUFNR]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Conversion"
+                          errorRowDisposition="FailComponent"
+                          externalMetadataColumnId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[AUFNR]"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[AUFNR]"
+                          name="AUFNR"
+                          truncationRowDisposition="FailComponent" />
+                      </outputColumns>
+                      <externalMetadataColumns
+                        isUsed="True">
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[SERNR]"
+                          dataType="wstr"
+                          length="50"
+                          name="SERNR" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[MATNR]"
+                          dataType="wstr"
+                          length="50"
+                          name="MATNR" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[ZSDMODCODE]"
+                          dataType="wstr"
+                          length="150"
+                          name="ZSDMODCODE" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[KDAUF]"
+                          dataType="wstr"
+                          length="50"
+                          name="KDAUF" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[NAME1]"
+                          dataType="wstr"
+                          length="50"
+                          name="NAME1" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[MATNR_KU]"
+                          dataType="wstr"
+                          length="50"
+                          name="MATNR_KU" />
+                        <externalMetadataColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].ExternalColumns[AUFNR]"
+                          dataType="wstr"
+                          length="50"
+                          name="AUFNR" />
+                      </externalMetadataColumns>
+                    </output>
+                    <output
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output]"
+                      isErrorOut="true"
+                      name="OLE DB Source Error Output">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[SERNR]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[SERNR]"
+                          name="SERNR" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[MATNR]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[MATNR]"
+                          name="MATNR" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[ZSDMODCODE]"
+                          dataType="wstr"
+                          length="150"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[ZSDMODCODE]"
+                          name="ZSDMODCODE" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[KDAUF]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[KDAUF]"
+                          name="KDAUF" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[NAME1]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[NAME1]"
+                          name="NAME1" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[MATNR_KU]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[MATNR_KU]"
+                          name="MATNR_KU" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[AUFNR]"
+                          dataType="wstr"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[AUFNR]"
+                          name="AUFNR" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+                <component
+                  refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns"
+                  componentClassID="Microsoft.DerivedColumn"
+                  contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+                  description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+                  name="Truncate columns"
+                  usesDispositions="true">
+                  <inputs>
+                    <input
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input]"
+                      description="Input to the Derived Column Transformation"
+                      name="Derived Column Input">
+                      <inputColumns>
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input].Columns[SERNR]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="SERNR"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[SERNR]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input].Columns[MATNR]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="MATNR"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[MATNR]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input].Columns[ZSDMODCODE]"
+                          cachedDataType="wstr"
+                          cachedLength="150"
+                          cachedName="ZSDMODCODE"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[ZSDMODCODE]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input].Columns[KDAUF]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="KDAUF"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[KDAUF]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input].Columns[NAME1]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="NAME1"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[NAME1]" />
+                        <inputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input].Columns[MATNR_KU]"
+                          cachedDataType="wstr"
+                          cachedLength="50"
+                          cachedName="MATNR_KU"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[MATNR_KU]" />
+                      </inputColumns>
+                      <externalMetadataColumns />
+                    </input>
+                  </inputs>
+                  <outputs>
+                    <output
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output]"
+                      description="Default Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      name="Derived Column Output"
+                      synchronousInputId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived SERNR]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="20"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived SERNR]"
+                          name="Derived SERNR"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[LEFT](#{Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[SERNR]},20)</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">LEFT(SERNR,20)</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived MATNR]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="15"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived MATNR]"
+                          name="Derived MATNR"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[LEFT](#{Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[MATNR]},15)</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">LEFT(MATNR,15)</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived ZSDMODCODE]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived ZSDMODCODE]"
+                          name="Derived ZSDMODCODE"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[LEFT](#{Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[ZSDMODCODE]},50)</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">LEFT(ZSDMODCODE,50)</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived KDAUF]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="15"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived KDAUF]"
+                          name="Derived KDAUF"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[LEFT](#{Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[KDAUF]},15)</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">LEFT(KDAUF,15)</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived NAME1]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="30"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived NAME1]"
+                          name="Derived NAME1"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[LEFT](#{Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[NAME1]},30)</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">LEFT(NAME1,30)</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived MATNR_KU]"
+                          dataType="wstr"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          length="50"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Derived MATNR_KU]"
+                          name="Derived MATNR_KU"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[LEFT](#{Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output].Columns[MATNR_KU]},50)</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">LEFT(MATNR_KU,50)</property>
+                          </properties>
+                        </outputColumn>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Released Date]"
+                          dataType="dbTimeStamp"
+                          errorOrTruncationOperation="Computation"
+                          errorRowDisposition="FailComponent"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output].Columns[Released Date]"
+                          name="Released Date"
+                          truncationRowDisposition="FailComponent">
+                          <properties>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Expression"
+                              name="Expression">[GETDATE]()</property>
+                            <property
+                              containsID="true"
+                              dataType="System.String"
+                              description="Derived Column Friendly Expression"
+                              expressionType="Notify"
+                              name="FriendlyExpression">GETDATE()</property>
+                          </properties>
+                        </outputColumn>
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                    <output
+                      refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Error Output]"
+                      description="Error Output of the Derived Column Transformation"
+                      exclusionGroup="1"
+                      isErrorOut="true"
+                      name="Derived Column Error Output"
+                      synchronousInputId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input]">
+                      <outputColumns>
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                          name="ErrorCode"
+                          specialFlags="1" />
+                        <outputColumn
+                          refId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          dataType="i4"
+                          lineageId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                          name="ErrorColumn"
+                          specialFlags="2" />
+                      </outputColumns>
+                      <externalMetadataColumns />
+                    </output>
+                  </outputs>
+                </component>
+              </components>
+              <paths>
+                <path
+                  refId="Package\TestStand\Send SAP Requests to Test Stand.Paths[Derived Column Output]"
+                  endId="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP.Inputs[OLE DB Destination Input]"
+                  name="Derived Column Output"
+                  startId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Outputs[Derived Column Output]" />
+                <path
+                  refId="Package\TestStand\Send SAP Requests to Test Stand.Paths[OLE DB Source Output]"
+                  endId="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns.Inputs[Derived Column Input]"
+                  name="OLE DB Source Output"
+                  startId="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData.Outputs[OLE DB Source Output]" />
+              </paths>
+            </pipeline>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\TestStand\Truncate tblSourceDataTestStandTmp"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{B2A952AD-4F3B-430F-95A0-05131BFD7600}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Truncate tblSourceDataTestStandTmp"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{5B404F3F-437B-46F8-9241-3BECDE8B7541}"
+              SQLTask:SqlStatementSource="TRUNCATE TABLE [dbo].[tblSKMES_MP_TestStandData]" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\TestStand.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{F37566C0-98DD-4E84-BBA1-911074787FFF}"
+          DTS:From="Package\TestStand\Truncate tblSourceDataTestStandTmp"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\TestStand\Receive Existing Requests for Test Stand" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\TestStand.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{1F77BCF5-73DE-45CB-825C-4E96CB9B6536}"
+          DTS:From="Package\TestStand\Receive Existing Requests for Test Stand"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\TestStand\Send SAP Requests to Test Stand" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\TestStand.PrecedenceConstraints[Constraint 2]"
+          DTS:CreationName=""
+          DTS:DTSID="{ED888AFF-8169-48CE-80D2-3DA7D98CD900}"
+          DTS:From="Package\TestStand\Send SAP Requests to Test Stand"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 2"
+          DTS:To="Package\TestStand\Mark TestStand Data Read" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
+      DTS:CreationName=""
+      DTS:DTSID="{162030B7-F6A1-4CC7-B207-90CF86015408}"
+      DTS:From="Package\TestStand"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 1"
+      DTS:To="Package\Send Alert"
+      DTS:Value="1" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="177.6,41.6"
+          Id="Package\Send Alert"
+          TopLeft="388.571435188761,44.1411771569698" />
+        <NodeLayout
+          Size="256,41.6"
+          Id="Package\TestStand\Mark TestStand Data Read"
+          TopLeft="13.3142923510807,246.986669322544" />
+        <NodeLayout
+          Size="256,41.6"
+          Id="Package\TestStand\Receive Existing Requests for Test Stand"
+          TopLeft="13.3142923510807,91.238694359252" />
+        <NodeLayout
+          Size="256,41.6"
+          Id="Package\TestStand\Send SAP Requests to Test Stand"
+          TopLeft="13.3142923510807,169.112681840898" />
+        <NodeLayout
+          Size="256,41.6"
+          Id="Package\TestStand\Truncate tblSourceDataTestStandTmp"
+          TopLeft="13.3142923510807,13.3647068776062" />
+        <EdgeLayout
+          Id="Package\TestStand.PrecedenceConstraints[Constraint]"
+          TopLeft="141.314292351081,54.9647068776062">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,36.2739874816458"
+              Start="0,0"
+              End="0,28.7739874816458">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,28.7739874816458" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\TestStand.PrecedenceConstraints[Constraint 1]"
+          TopLeft="141.314292351081,132.838694359252">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,36.2739874816458"
+              Start="0,0"
+              End="0,28.7739874816458">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,28.7739874816458" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\TestStand.PrecedenceConstraints[Constraint 2]"
+          TopLeft="141.314292351081,210.712681840898">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,36.2739874816458"
+              Start="0,0"
+              End="0,28.7739874816458">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,28.7739874816458" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="284.8,345.6"
+          Size="284.8,388.8"
+          Id="Package\TestStand"
+          TopLeft="29.1428598189841,44.1411771569698" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="313.942859818984,238.54117715697">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="74.6285753697769,-173.6"
+              Start="0,0"
+              End="67.1285753697769,-173.6">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="33.3142876848884,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="33.3142876848884,0"
+                    Point2="37.3142876848884,0"
+                    Point3="37.3142876848884,-4" />
+                  <mssgle:LineSegment
+                    End="37.3142876848884,-169.6" />
+                  <mssgle:CubicBezierSegment
+                    Point1="37.3142876848884,-169.6"
+                    Point2="37.3142876848884,-173.6"
+                    Point3="41.3142876848884,-173.6" />
+                  <mssgle:LineSegment
+                    End="67.1285753697769,-173.6" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="22.0729400286384,1,30.4826953125,9.7490234375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\TestStand\Receive Existing Requests for Test Stand">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="222.4,41.6"
+          Id="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP"
+          TopLeft="20.000000340598,18.3529414338637" />
+        <NodeLayout
+          Size="222.4,41.6"
+          Id="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData"
+          TopLeft="20.000000340598,99.0592169057075" />
+        <EdgeLayout
+          Id="Package\TestStand\Receive Existing Requests for Test Stand.Paths[OLE DB Source Output]"
+          TopLeft="131.200000340598,59.9529414338637">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,39.1062754718438"
+              Start="0,0"
+              End="0,31.6062754718438">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,31.6062754718438" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\TestStand\Receive Existing Requests for Test Stand\PoziadVyrSAP">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\TestStand\Receive Existing Requests for Test Stand\tblSKMES_MP_TestStandData">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
+    design-time-name="Package\TestStand\Send SAP Requests to Test Stand">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="239.2,41.6"
+          Id="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP"
+          TopLeft="44.8,180.8" />
+        <NodeLayout
+          Size="239.2,41.6"
+          Id="Package\TestStand\Send SAP Requests to Test Stand\Truncate columns"
+          TopLeft="44.8,105.2" />
+        <NodeLayout
+          Size="239.2,41.6"
+          Id="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData"
+          TopLeft="44.8,29.6" />
+        <EdgeLayout
+          Id="Package\TestStand\Send SAP Requests to Test Stand.Paths[Derived Column Output]"
+          TopLeft="164.4,146.8">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,34"
+              Start="0,0"
+              End="0,26.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\TestStand\Send SAP Requests to Test Stand.Paths[OLE DB Source Output]"
+          TopLeft="164.4,71.2">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,34"
+              Start="0,0"
+              End="0,26.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,26.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\TestStand\Send SAP Requests to Test Stand\PoziadVyrSAP">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\TestStand\Send SAP Requests to Test Stand\spSKMES_MP_TestStandGetData">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

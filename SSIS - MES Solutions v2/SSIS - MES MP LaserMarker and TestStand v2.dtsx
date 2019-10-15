@@ -1,0 +1,267 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="9/1/2015 6:40:28 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="PXLT44241"
+  DTS:CreatorName="DANFOSS\rknoll"
+  DTS:DTSID="{76D364CB-1D17-4803-9809-D603AAF07771}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.1301.433"
+  DTS:LocaleID="1051"
+  DTS:ObjectName="SSIS - MES MP LaserMarker and TestStand v2"
+  DTS:PackageType="5"
+  DTS:ProtectionLevel="0"
+  DTS:VersionBuild="76"
+  DTS:VersionGUID="{B2180E77-82AD-458F-907A-24DE1A012B12}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:PackageParameters>
+    <DTS:PackageParameter
+      DTS:CreationName=""
+      DTS:DataType="8"
+      DTS:DTSID="{F01557B2-2871-4066-9C76-492F64460936}"
+      DTS:ObjectName="Recipients">
+      <DTS:Property
+        DTS:DataType="8"
+        DTS:Name="ParameterValue">rknoll@danfoss.com</DTS:Property>
+    </DTS:PackageParameter>
+  </DTS:PackageParameters>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\LaserMarker and TestStand Data Prepare"
+      DTS:CreationName="STOCK:SEQUENCE"
+      DTS:Description="Sequence Container"
+      DTS:DTSID="{9EDFD508-06A4-47B5-9381-E3CFE778650B}"
+      DTS:ExecutableType="STOCK:SEQUENCE"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="LaserMarker and TestStand Data Prepare">
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\LaserMarker and TestStand Data Prepare\LaserMarker"
+          DTS:CreationName="Microsoft.ExecutePackageTask"
+          DTS:Description="Execute Package Task"
+          DTS:DTSID="{13F2DD89-F757-4399-97B8-2FC9712C4A8B}"
+          DTS:ExecutableType="Microsoft.ExecutePackageTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="LaserMarker"
+          DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <UseProjectReference>True</UseProjectReference>
+              <PackageName>SSIS - MES MP LaserMarker v2.dtsx</PackageName>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\LaserMarker and TestStand Data Prepare\Read SIT ProdOrders"
+          DTS:CreationName="Microsoft.ExecutePackageTask"
+          DTS:Description="Execute Package Task"
+          DTS:DTSID="{79F3751A-0D04-4886-9A3C-22E5ECF6EBAD}"
+          DTS:ExecutableType="Microsoft.ExecutePackageTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Read SIT ProdOrders"
+          DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <UseProjectReference>True</UseProjectReference>
+              <PackageName>SSIS - MES MP ProdOrder SIT Read v2.dtsx</PackageName>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
+          DTS:refId="Package\LaserMarker and TestStand Data Prepare\TestStand"
+          DTS:CreationName="Microsoft.ExecutePackageTask"
+          DTS:Description="Execute Package Task"
+          DTS:DTSID="{34DACCA3-CBAE-42A9-B2F3-323512B50809}"
+          DTS:ExecutableType="Microsoft.ExecutePackageTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="TestStand"
+          DTS:TaskContact="Microsoft Corporation; Microsoft SQL Server; Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <ExecutePackageTask>
+              <UseProjectReference>True</UseProjectReference>
+              <PackageName>SSIS - MES MP TestStand v2.dtsx</PackageName>
+            </ExecutePackageTask>
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:PrecedenceConstraints>
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\LaserMarker and TestStand Data Prepare.PrecedenceConstraints[Constraint]"
+          DTS:CreationName=""
+          DTS:DTSID="{D821B1E9-512E-4A09-9F3C-DE7F6F28DD3E}"
+          DTS:From="Package\LaserMarker and TestStand Data Prepare\Read SIT ProdOrders"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint"
+          DTS:To="Package\LaserMarker and TestStand Data Prepare\LaserMarker" />
+        <DTS:PrecedenceConstraint
+          DTS:refId="Package\LaserMarker and TestStand Data Prepare.PrecedenceConstraints[Constraint 1]"
+          DTS:CreationName=""
+          DTS:DTSID="{B74B85BD-BBF1-4E85-9881-4E569A87B35B}"
+          DTS:From="Package\LaserMarker and TestStand Data Prepare\LaserMarker"
+          DTS:LogicalAnd="True"
+          DTS:ObjectName="Constraint 1"
+          DTS:To="Package\LaserMarker and TestStand Data Prepare\TestStand" />
+      </DTS:PrecedenceConstraints>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Send Alert"
+      DTS:CreationName="Microsoft.SendMailTask"
+      DTS:Description="Send Mail Task"
+      DTS:DTSID="{AE6366C4-A44C-45FE-BABF-92C71BC63435}"
+      DTS:ExecutableType="Microsoft.SendMailTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Send Alert"
+      DTS:TaskContact="Send Mail Task; Microsoft Corporation; SQL Server 2012; © 2007 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:PropertyExpression
+        DTS:Name="ToLine">@[$Package::Recipients]</DTS:PropertyExpression>
+      <DTS:ObjectData>
+        <SendMailTask:SendMailTaskData
+          SendMailTask:SMTPServer="{B17D5B37-BA83-4557-AB28-3CA71D14B3E7}"
+          SendMailTask:From="ssis@danfoss.com"
+          SendMailTask:To="rknoll@danfoss.com"
+          SendMailTask:Subject="SSIS - MES MP LaserMarker and TestStand"
+          SendMailTask:Priority="High"
+          SendMailTask:MessageSource="SSIS - MES MP LaserMarker and TestStand Failed.&#xA;&#xA;Check jobs for LaserMarker or TestStand." xmlns:SendMailTask="www.microsoft.com/sqlserver/dts/tasks/sendmailtask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{7ACF057B-CB1D-4A2C-B97E-81AF6DA3F308}"
+      DTS:From="Package\LaserMarker and TestStand Data Prepare"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Send Alert"
+      DTS:Value="1" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="184,41.6"
+          Id="Package\LaserMarker and TestStand Data Prepare\LaserMarker"
+          TopLeft="28,92.552944132201" />
+        <NodeLayout
+          Size="184,41.6"
+          Id="Package\LaserMarker and TestStand Data Prepare\Read SIT ProdOrders"
+          TopLeft="28,18.5176483114698" />
+        <NodeLayout
+          Size="184,41.6"
+          Id="Package\LaserMarker and TestStand Data Prepare\TestStand"
+          TopLeft="28,169.570592042566" />
+        <EdgeLayout
+          Id="Package\LaserMarker and TestStand Data Prepare.PrecedenceConstraints[Constraint]"
+          TopLeft="120,60.1176483114698">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,32.4352958207312"
+              Start="0,0"
+              End="0,24.9352958207312">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,24.9352958207312" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\LaserMarker and TestStand Data Prepare.PrecedenceConstraints[Constraint 1]"
+          TopLeft="120,134.152944132201">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,35.417647910365"
+              Start="0,0"
+              End="0,27.917647910365">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,27.917647910365" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="246.4,242.4"
+          Size="246.4,285.6"
+          Id="Package\LaserMarker and TestStand Data Prepare"
+          TopLeft="61.7142867652739,92.1737272478859" />
+        <NodeLayout
+          Size="180,41.6"
+          Id="Package\Send Alert"
+          TopLeft="414.761909898987,92.1737272478859" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="308.114286765274,234.973727247886">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="106.647623133713,-122"
+              Start="0,0"
+              End="99.1476231337131,-122">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="49.3238115668566,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="49.3238115668566,0"
+                    Point2="53.3238115668566,0"
+                    Point3="53.3238115668566,-4" />
+                  <mssgle:LineSegment
+                    End="53.3238115668566,-118" />
+                  <mssgle:CubicBezierSegment
+                    Point1="53.3238115668566,-118"
+                    Point2="53.3238115668566,-122"
+                    Point3="57.3238115668566,-122" />
+                  <mssgle:LineSegment
+                    End="99.1476231337131,-122" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="38.0824639106066,1,30.4826953125,9.7490234375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

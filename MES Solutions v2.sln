@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{159641D6-6404-4A2A-AE62-294DE0FE8301}") = "SSIS - MES Solutions v2", "SSIS - MES Solutions v2\SSIS - MES Solutions v2.dtproj", "{9F655B90-C140-4B1C-A1AA-57B8DA105FD8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Development|Default = Development|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9F655B90-C140-4B1C-A1AA-57B8DA105FD8}.Development|Default.ActiveCfg = Development
+		{9F655B90-C140-4B1C-A1AA-57B8DA105FD8}.Development|Default.Build.0 = Development
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1EF6D1BE-9D35-4A44-8F76-1D7222EFDA10}
+	EndGlobalSection
+EndGlobal
